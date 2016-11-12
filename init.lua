@@ -1,8 +1,8 @@
 minetest.register_on_chat_message(function(name, message)
 	local pos = minetest.get_player_by_name(name):getpos()
-	pos.y = pos.y + 2.5
 	local text = minetest.add_entity(pos, "chat_bubbles:text")
 	text:get_luaentity().text = message
+	text:set_attach(minetest.get_player_by_name(name), "", {x=0,y=15,z=0},{x=0,y=0,z=0})
 end)
 
 minetest.register_entity("chat_bubbles:text", {
