@@ -6,7 +6,7 @@ minetest.register_on_chat_message(function(name, message)
 end)
 
 minetest.register_entity("chat_bubbles:text", {
-    collisionbox = { -1, -1, -1, 1, 1, 1 },
+    collisionbox = { 0, 0, 0, 0, 0, 0 },
     visual = "sprite",
     textures = {},
 	text = "",
