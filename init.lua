@@ -14,7 +14,7 @@ minetest.register_entity("chat_bubbles:text", {
     on_activate = function(self)
 		minetest.after(0,function(self)
 			print(self.text)
-			self.object:set_properties({textures={generate_texture(create_lines(self.text))}})
+			self.object:set_properties({textures={chat_bubble.generate_texture(chat_bubble.create_lines(self.text))}})
 		end,self)
     end,
     on_step = function(self,dtime)
@@ -24,7 +24,7 @@ minetest.register_entity("chat_bubbles:text", {
 		end
     end,
 })
-
+chat_bubble = {}
 local chars_file = io.open(minetest.get_modpath("chat_bubbles").."/characters", "r")
 local charmap = {}
 local max_chars = 16
@@ -51,7 +51,7 @@ local NUMBER_OF_LINES = 4
 local LINE_HEIGHT = 14
 local CHAR_WIDTH = 5
 
-string_to_array = function(str)
+chat_bubble.string_to_array = function(str)
 	local tab = {}
 	for i=1,string.len(str) do
 		table.insert(tab, string.sub(str, i,i))
@@ -59,11 +59,11 @@ string_to_array = function(str)
 	return tab
 end
 
-string_to_word_array = function(str)
+chat_bubble.string_to_word_array = function(str)
 	local tab = {}
 	local current = 1
 	tab[1] = ""
-	for _,char in ipairs(string_to_array(str)) do
+	for _,char in ipairs(chat_bubble.string_to_array(str)) do
 		if char ~= " " then
 			tab[current] = tab[current]..char
 		else
@@ -74,11 +74,11 @@ string_to_word_array = function(str)
 	return tab
 end
 
-create_lines = function(text)
+chat_bubble.create_lines = function(text)
 	local line = ""
 	local line_num = 1
 	local tab = {}
-	for _,word in ipairs(string_to_word_array(text)) do
+	for _,word in ipairs(chat_bubble.string_to_word_array(text)) do
 		if string.len(line)+string.len(word) < LINE_LENGTH and word ~= "|" then
 			if line ~= "" then
 				line = line.." "..word
@@ -102,18 +102,18 @@ create_lines = function(text)
 	return tab
 end
 
-generate_texture = function(lines)
+chat_bubble.generate_texture = function(lines)
     local texture = "[combine:"..SIGN_WITH.."x"..SIGN_WITH
     local ypos = 12
     for i = 1, #lines do
-        texture = texture..generate_line(lines[i], ypos)
+        texture = texture..chat_bubble.generate_line(lines[i], ypos)
         ypos = ypos + LINE_HEIGHT
     end
     texture = "chat_bubble.png^"..texture
     return texture
 end
 
-generate_line = function(s, ypos)
+chat_bubble.generate_line = function(s, ypos)
     local i = 1
     local parsed = {}
     local width = 0
